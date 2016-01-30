@@ -4,13 +4,41 @@
     <TITLE>Game Jam 2016</TITLE>
     <script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
     <script src="shared/main.js"></script>
+		<style>
+		body {
+		font-family:Arial, sans-serif;
+		color:white;
+
+		background: #7abcff; /* Old browsers */
+		background: -moz-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#4096ee',GradientType=0 ); /* IE6-9 */
+		}
+
+			#createGame, #joinGame {
+				font-size: 40px;
+		    -webkit-appearance: none;
+		    background: none;
+		    border: solid white 1px;
+		    color: white;
+		    font-weight: bold;
+		    border-radius: 8px;
+		    padding: 10px;
+		    width: 300px;
+		    display: block;
+		    margin-top: 40px;
+		    margin-left: auto;
+		    margin-right: auto;
+			}
+		</style>
 </HEAD>
 
 <BODY>
     Player tag:
     <input type="text" id="playerTag">
-    <button onclick="location.href='server/server.html'">Create</button>
-    <button onclick="addPlayer()">Join</button>
+    <button id="createGame" onclick="location.href='server/server.html'">Create</button>
+    <button id="joinGame" onclick="addPlayer()">Join</button>
     <div id="infoDisplay"></div>
 </BODY>
 
