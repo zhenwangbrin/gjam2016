@@ -1,9 +1,17 @@
 <HTML>
+
 <HEAD>
-<TITLE>Game Jam 2016</TITLE>
+    <TITLE>Game Jam 2016</TITLE>
+    <script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+    <script src="shared/main.js"></script>
 </HEAD>
+
 <BODY>
-	<button onclick="location.href='/server/server.html'">Create</button>
-	<button onclick="location.href='/client/client.html'">Join</button>
+    Player tag:
+    <input type="text" id="playerTag">
+    <button onclick="">Create</button>
+    <button onclick="addPlayer()">Join</button>
+    <div id="infoDisplay"></div>
 </BODY>
+
 </HTML>
