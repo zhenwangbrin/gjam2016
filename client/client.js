@@ -1,0 +1,1 @@
+var playerRef = new Firebase("https://gjam2016.firebaseio.com/players/1");
