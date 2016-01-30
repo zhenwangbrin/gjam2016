@@ -28,7 +28,7 @@ function processRound(){
     var finishers = getFinishers(game);
     if(finishers.length === 0) return;
     var winner = getWinner(finishers);
-    awardWinner(winner);
+    awardWinner(winner, game);
     game = newRound(game, 5);
     fireRef.set(game);
   });
@@ -73,6 +73,7 @@ function getFinishers(game){
   return finishers;
 }
 
-function awardWinner(winner){
+function awardWinner(winner, game){
   winner.score += 10;
+  game.rain = winner.id;
 }
