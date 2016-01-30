@@ -13,6 +13,21 @@
   position:relative;
 }
 
+#pattern {
+  position:fixed;
+  top:20px;
+  background-color:white;
+  color:black;
+  padding:10px;
+  font-size:20px;
+  width:200px;
+  /*margin-left:auto;
+  margin-right:auto;*/
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+}
+
 #game-title {
   font-family:Arial, sans-serif;
   color:white;
@@ -31,6 +46,7 @@
   top:50%;
   left:50%;
   transform:translateX(-50%)translateY(-50%);
+  transition:all 0.5s;
 }
 
 .players {

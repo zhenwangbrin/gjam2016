@@ -4,9 +4,25 @@ Game = function() {
   this.cloud = new Cloud();
   this.players = [1,2,3,4];
   this.hud = new HUD();
+  this.firebase = null;
 };
 Game.prototype = {
+  auth: function() {
+    var FireURL = "gjam2016.firebaseio.com/";
+    var ref = new Firebase(FireURL);
+    ref.authWithCustomToken("3Bdk3eWhR6QLEbVxhPA37rN4FdCMEsdNA9jcgKAr", function(error, authData) {
+      if (error) {
+        console.log("Authentication Failed!", error);
+      } else {
+        console.log("Authenticated!");
+        debugger;
+       }
+    });
+
+    this.firebase = ref;
+  },
   initialize: function() {
+    this.auth();
     this.hud.build();
     this.cloud.setCloudMiddle();
   },
