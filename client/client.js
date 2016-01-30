@@ -24,5 +24,20 @@ playersRef.on('child_removed', function (oldChildSnapshot) {
 });
 
 playersRef.on('child_changed', function (childSnapshot, prevChildKey) {
-    // code to display changes to other players.
+    // code to display changes to players.
 });
+
+// function to generate the randomized player keypads base off the current sequence.
+function randomizeOptions() {
+
+}
+
+// function to handle incoming keypad strokes to test against the current sequence.
+function keyStroke(strokeId) {
+
+}
+
+// function to update the client time stamp if a sequence was correctly entered.
+function strokeSucceed() {
+
+}
