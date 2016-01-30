@@ -1,9 +1,18 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="style.css"></link>
+  <script src="game.js"></script>
 </head>
 <body>
   <h1 id="game-title">Rain Dance</h1>
-  <div id="map"></div>
+  <div id="map">
+    <div id="cloud"></div>
+  </div>
+  <div id="hud">
+  </div>
+  <script>
+  Game = new Game();
+  Game.initialize();
+  </script>
 </body>
 </html>
