@@ -12,34 +12,19 @@ app.listen(3000, function () {});
 ***************************/
 var fireRef = require('./server/Firebase')();
 
-var game;
-fireRef.on('value', function(snap){
-  game = snap.val();
+fireRef.on('child_changed', function(childSnapshot) {
+  fireRef.once('value', function(snap){
+    var game = snap.val();
+    if(Date.now() > game.checkTime){
+      var finishers = getFinishers(game);
+      if(finishers.length === 0) return;
+      var winner = getWinner(finishers);
+      awardWinner(winner);
+      game = newRound(game, 5);
+      fireRef.set(game);
+    }
+  });
 });
-
-fireRef.on('child_changed', function(childSnapshot, prevChildKey) {
-  if(Date.now() > game.checkTime){
-    var finishers = getFinishers(game);
-    var winner = getWinner(finishers);
-    awardWinner(winner);
-    game = newRound(game, seqCount);
-    fireRef.set(game);
-  }
-});
-
-
-//
-// 123:{
-//   seq: [5,2,6,8,3],
-//   start: 123456,
-//   players:{
-//     1:{
-//       id: 1,
-//       completed: true,
-//       finished: 123456
-//     }
-//   }
-// }
 
 function newRound(game, seqCount){
   game.seq = newSeq(seqCount);
@@ -64,14 +49,14 @@ function resetUsers(players){
 }
 
 function getWinner(finishers){
-  finishers = _.sortBy(finishers, ['finished']);
+  finishers = _.sortBy(finishers, ['completed']);
   return finishers[0]
 }
 
 function getFinishers(game){
   var finishers = [];
   _.forEach(game.players, function(player){
-    if (player.completed && player.finish > game.start){
+    if (player.completed){
       finishers.push(player);
     }
   });
