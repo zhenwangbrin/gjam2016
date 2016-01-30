@@ -61,13 +61,13 @@
   flex-grow: 1;
   height:50px;
   padding:5px;
+  text-align:center;
 }
 
 .players .player .name {
-  background-color:black;
   display:block;
   color:white;
-  padding:4px;
+  font-size:20px;
 }
 
 .players.player .score {

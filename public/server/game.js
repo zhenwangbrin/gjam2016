@@ -15,7 +15,6 @@ Game.prototype = {
         console.log("Authentication Failed!", error);
       } else {
         console.log("Authenticated!");
-        debugger;
        }
     });
 
