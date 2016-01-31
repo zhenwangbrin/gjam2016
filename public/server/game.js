@@ -1,3 +1,6 @@
+WINNING_SCORE = 100;
+SCRAMBLE_TIMEOUT = 2500;
+
 Game = function() {
   this.firebaseRef = null;
   this.map = new Map();
@@ -6,6 +9,7 @@ Game = function() {
   this.hud = new HUD();
   this.sequence = new Sequence();
   this.firebase = {};
+  this.messagePopup = new MessagePopup();
 };
 Game.prototype = {
   initialize: function() {
@@ -15,7 +19,14 @@ Game.prototype = {
   updateScores: function( newPlayerValues ) {
     for(var idx = 0; idx < newPlayerValues.length; idx++ ){
       this.players[idx].score = newPlayerValues.score;
+      if(score > WINNING_SCORE) {
+        this.declareWinner( idx );
+      }
     }
+  },
+  declareWinner: function( winnerIndex ) {
+    var playerName = this.players[winnerIndex].name || "Player " + (winnerIndex + 1);
+    this.messagePopup.showMessage(playerName + " wins!");
   },
   bindFirebase: function() {
     this.firebase = {
@@ -62,6 +73,19 @@ Game.prototype = {
   }
 };
 
+MessagePopup = function() {
+  this.el = document.querySelector("#messages");
+};
+MessagePopup.prototype = {
+  showMessage: function( message ) {
+    this.el.style.display = "block";
+    this.el.innerHTML = message;
+  },
+  hideMessage: function() {
+    this.el.style.display = "none";
+  }
+};
+
 
 Sequence = function() {
   this.el = document.querySelector("#sequence");
@@ -84,7 +108,7 @@ Sequence.prototype = {
       this.hideTimeout = null;
       sequence.hidePart();
       sequence.scramble();
-    }, 1000);
+    }, SCRAMBLE_TIMEOUT);
   },
   refresh: function( ) {
     this.el.innerHTML = this.pattern.join(" ");

@@ -13,6 +13,22 @@
   position:relative;
 }
 
+#messages {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%)translateY(-50%);
+  width: 80%;
+  max-width: 500px;
+  background-color: white;
+  border: solid 2px darkgray;
+  color: black;
+  font-size: 25px;
+  padding: 30px;
+  text-align: center;
+  display:none;
+}
+
 #sequence {
   position:fixed;
   top:20px;
