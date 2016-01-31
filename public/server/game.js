@@ -9,6 +9,7 @@ Game = function() {
   this.hud = new HUD();
   this.sequence = new Sequence();
   this.firebase = {};
+  this.rainingTarget = -1;
   this.messagePopup = new MessagePopup();
 };
 Game.prototype = {
@@ -55,6 +56,8 @@ Game.prototype = {
       } else {
         Game.cloud.setCloudMiddle();
       }
+      Game.rainingTarget = target;
+      Game.hud.refresh();
     });
     this.firebase.sequence.on("value", function( sequence ) {
       var newValue = sequence.val();
@@ -180,8 +183,10 @@ HUD.prototype = {
   },
   refresh: function() {
     for(var idx = 0; idx < Game.players.length; idx++) {
-      var slot = this.dom.players[idx];
-      slot.refresh();
+      var slot = this.slots[idx];
+      if(slot) {
+        slot.render();
+      }
     }
   },
   cleanupInner: function() {
@@ -248,6 +253,11 @@ PlayerSlot.prototype = {
   render: function() {
     this.dom.name.innerHTML = this.model.name || "Player " + (this.index + 1);
     this.dom.score.innerHTML = this.model.score;
+    if(Game.rainingTarget == this.index) {
+      this.el.classList.add("raining");
+    } else {
+      this.el.classList.remove("raining");
+    }
   }
 };
 

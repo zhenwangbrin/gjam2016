@@ -81,9 +81,13 @@
   font-size:26px;
 }
 
+.players .player.raining {
+  font-weight:bold;
+  color:rgb(144, 235, 255);
+}
+
 .players .player .name {
   display:block;
-  color:white;
 }
 
 .players.player .score {
