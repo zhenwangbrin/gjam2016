@@ -18,11 +18,21 @@ Game.prototype = {
     this.cloud.setCloudMiddle();
   },
   updateScores: function( newPlayerValues ) {
+    var winnerIs = -1;
+    var winningScore = -1;
+
     for(var idx = 0; idx < newPlayerValues.length; idx++ ){
-      this.players[idx].score = newPlayerValues.score;
-      if(score > WINNING_SCORE) {
-        this.declareWinner( idx );
+      var score = newPlayerValues[idx].score;
+      this.players[idx].score = score;
+      if(score >= WINNING_SCORE && score > winningScore) {
+        winnerIs = idx;
+        winningScore = score;
       }
+    }
+
+    this.hud.refresh();
+    if(winnerIs > -1) {
+      this.declareWinner( winnerIs );
     }
   },
   declareWinner: function( winnerIndex ) {
