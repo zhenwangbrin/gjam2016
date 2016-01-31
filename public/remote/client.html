@@ -1,21 +1,94 @@
 <HTML>
 
 <HEAD>
-    <TITLE>Game Jam 2016 Client</TITLE>
+    <TITLE>Game Jam 2016 - Ritual! - Client</TITLE>
     <script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
     <script src="../shared/main.js"></script>
     <script src="client.js"></script>
+	<style>
+		body {
+		font-family:Arial, sans-serif;
+		color:white;
+
+		background: #7abcff; /* Old browsers */
+		background: -moz-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#4096ee',GradientType=0 ); /* IE6-9 */
+		}
+
+			#createGame, #joinGame {
+				font-size: 40px;
+		    -webkit-appearance: none;
+		    background: none;
+		    border: solid white 1px;
+		    color: white;
+		    font-weight: bold;
+		    border-radius: 8px;
+		    padding: 10px;
+		    width: 300px;
+		    display: block;
+		    margin-top: 40px;
+		    margin-left: auto;
+		    margin-right: auto;
+			}
+
+		#selection{
+			width: 100%;
+			height:20%;
+			border: 1px solid white;
+		}
+
+		#buttons{
+			width: 100%;
+			height:80%;
+			border: 1px solid white;
+		}
+
+		td{
+			border: 1px solid white;
+			text-align: center;
+		}
+
+		button{
+			height:100%;
+			width:100%;
+		}
+	</style>
 </HEAD>
 
 <BODY>
-    <div id='enteredSequence'></div>
-    <div id='key0' onclick='keyStroke(0)'></div>
-    <div id='key1' onclick='keyStroke(1)'></div>
-    <div id='key2' onclick='keyStroke(2)'></div>
-    <div id='key3' onclick='keyStroke(3)'></div>
-    <div id='key4' onclick='keyStroke(4)'></div>
-    <div id='key5' onclick='keyStroke(5)'></div>
-    Client
+    <table id="selection">
+    	<tr>
+    		<td id='enteredSequence'></td>
+    	</tr>
+    </table>
+    <table id="buttons">
+    	<tr>
+    		<td>
+    			<button id='key0' onclick="keyStroke('0')"></button>
+    		</td>
+    		<td>
+    			<button id='key1' onclick="keyStroke('1')"></button>
+    		</td>
+    	</tr>
+    	<tr>
+    		<td>
+    			<button id='key2' onclick="keyStroke('2')"></button>
+    		</td>
+    		<td>
+    			<button id='key3' onclick="keyStroke('3')"></button>
+			</td>
+    	</tr>
+    	<tr>
+    		<td>
+    			<button id='key4' onclick="keyStroke('4')"></button>
+    		</td>
+    		<td>
+    			<button id='key5' onclick="keyStroke('5')"></button>
+			</td>
+    	</tr>
+    </table>
 </BODY>
 
 </HTML>

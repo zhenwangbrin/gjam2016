@@ -43,5 +43,5 @@ function addPlayer() {
         name: playerTag
     });
     updatePlayers = function () {};
-    location.href = '/remote/client.html?player=' + currentPlayerKey;
+    location.href = '/remote/client.html?player=' + (currentPlayerKey-1);
 }

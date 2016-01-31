@@ -1,15 +1,19 @@
-// reference my player
-var mePlayerRef = playersRef[parseInt(getParameterByName('player'))];
 
 var playerSequence = [];
 var serverSequence = [];
 var enteredSequence = [];
+var clientPlayerRef = new Firebase("https://gjam2016.firebaseio.com/players/"+getParameterByName('player'));
 
 if (!Date.now) {
     Date.now = function () {
         return new Date().getTime();
     }
 }
+
+clientPlayerRef.on('value', function (dataSnapshot) {
+    // code to handle disconnect
+    clientPlayerRef.onDisconnect().update({name:null});
+});
 
 sequenceRef.on('value', function (dataSnapshot) {
     // code to handle new value.
@@ -59,19 +63,23 @@ function randomizeOptions(seq) {
     serverSequence = seq;
     playerSequence = serverSequence.slice(0);
     playerSequence.push(Math.floor(Math.random() * serverSequence.length));
-    playerSequence.push(Math.floor(Math.random() * serverSequence.length));
     playerSequence = shuffle(playerSequence);
+    
+    for (var index = 0; index < playerSequence.length; index++) {
+        var currentElem = document.getElementById('key'+index);
+        currentElem.innerHTML = playerSequence[index];
+    }
 }
 
 // function to handle incoming keypad strokes to test against the current sequence.
 function keyStroke(keyIndex) {
     var currentKey = enteredSequence.length
     if (playerSequence[keyIndex] === serverSequence[currentKey]) {
-        enteredSequence.push(playerSequence[currentKey]);
+        enteredSequence.push(playerSequence[keyIndex]);
         document.getElementById("enteredSequence").innerHTML = enteredSequence.join(' ');
         checkKeyStroke();
     } else {
-        enteredSequence.removeAll();
+        enteredSequence = [];
         document.getElementById("enteredSequence").innerHTML = 'X';
     }
 }
@@ -79,8 +87,11 @@ function keyStroke(keyIndex) {
 // function to update the client time stamp if a sequence was correctly entered.
 function checkKeyStroke() {
     if (enteredSequence.length === serverSequence.length) {
-        mePlayerRef.completed = true;
-        mePlayerRef.finishTime = Date.now();
+        document.getElementById("enteredSequence").innerHTML = 'You got it!';
+        clientPlayerRef.update({
+            completed: true,
+            finishTime: Date.now()
+        });
     }
 }
 
