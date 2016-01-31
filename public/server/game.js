@@ -24,6 +24,7 @@ Game.prototype = {
     for(var idx = 0; idx < newPlayerValues.length; idx++ ){
       var score = newPlayerValues[idx].score;
       this.players[idx].score = score;
+      this.players[idx].name = newPlayerValues[idx].name;
       if(score >= WINNING_SCORE && score > winningScore) {
         winnerIs = idx;
         winningScore = score;
