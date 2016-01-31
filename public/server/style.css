@@ -78,12 +78,12 @@
   height:50px;
   padding:5px;
   text-align:center;
+  font-size:26px;
 }
 
 .players .player .name {
   display:block;
   color:white;
-  font-size:20px;
 }
 
 .players.player .score {
