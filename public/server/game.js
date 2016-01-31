@@ -2,28 +2,68 @@ Game = function() {
   this.firebaseRef = null;
   this.map = new Map();
   this.cloud = new Cloud();
-  this.players = [1,2,3,4];
+  this.players = null;
   this.hud = new HUD();
-  this.firebase = null;
+  this.sequence = new Sequence();
+  this.firebase = {};
 };
 Game.prototype = {
-  auth: function() {
-    var FireURL = "gjam2016.firebaseio.com/";
-    var ref = new Firebase(FireURL);
-    ref.authWithCustomToken("3Bdk3eWhR6QLEbVxhPA37rN4FdCMEsdNA9jcgKAr", function(error, authData) {
-      if (error) {
-        console.log("Authentication Failed!", error);
-      } else {
-        console.log("Authenticated!");
-       }
-    });
-
-    this.firebase = ref;
-  },
+  // auth: function() {
+  //   var FireURL = "gjam2016.firebaseio.com/";
+  //   var ref = new Firebase(FireURL);
+  //   ref.authWithCustomToken("3Bdk3eWhR6QLEbVxhPA37rN4FdCMEsdNA9jcgKAr", function(error, authData) {
+  //     if (error) {
+  //       console.log("Authentication Failed!", error);
+  //     } else {
+  //       console.log("Authenticated!");
+  //      }
+  //   });
+  //
+  //   this.firebase = ref;
+  // },
   initialize: function() {
-    this.auth();
-    this.hud.build();
+    // this.auth();
+    this.bindFirebase();
+    // this.hud.build();
     this.cloud.setCloudMiddle();
+  },
+  updateScores: function( newPlayerValues ) {
+    for(var idx = 0; idx < newPlayerValues.length; idx++ ){
+      this.players[idx].score = newPlayerValues.score;
+    }
+  },
+  bindFirebase: function() {
+    this.firebase = {
+      players: new Firebase("https://gjam2016.firebaseio.com/players"),
+      rain: new Firebase("https://gjam2016.firebaseio.com/rain"),
+      sequence: new Firebase("https://gjam2016.firebaseio.com/seq")
+    };
+
+
+    this.firebase.players.on("value", function( players ) {
+      var newValue = players.val();
+      if(!Game.players || Game.players.length !== newValue.length) {
+        Game.players = newValue;
+        Game.hud.build();
+      } else {
+        Game.updateScores( newValue );
+        Game.hud.refresh();
+      }
+
+    });
+    this.firebase.rain.on("value", function( rain ) {
+      var target = rain.val();
+
+      if( target && target > -1) {
+        Game.cloud.setCloudToPlayer(target);
+      } else {
+        Game.cloud.setCloudMiddle();
+      }
+    });
+    this.firebase.sequence.on("value", function( sequence ) {
+      var newValue = sequence.val();
+      Game.sequence.changeTo( newValue );
+    });
   },
   start: function() {
 
@@ -45,7 +85,46 @@ Game.prototype = {
 };
 
 
+Sequence = function() {
+  this.el = document.querySelector("#sequence");
+  this.pattern = null;
+  this.hideTimeout = null;
+};
 
+Sequence.prototype = {
+  changeTo: function( newValue ) {
+    var sequence = this;
+
+    this.pattern = newValue;
+    this.refresh();
+
+    if(this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+    setTimeout( function() {
+      this.hideTimeout = null;
+      sequence.hidePart();
+    }, 1000);
+  },
+  refresh: function( ) {
+    this.el.innerHTML = this.pattern.join(" ");
+  },
+  hidePart: function() {
+    var index = Math.random();
+    index = Math.ceil(index * this.pattern.length,0) - 1;
+
+    if(index < 0) {
+      index = 0;
+    }
+    if(index >= this.pattern.length) {
+      index = this.pattern.length - 1;
+    }
+
+    this.pattern[index] = "?";
+    this.refresh();
+  }
+ };
 
 //-------------------------------------------
 // HUD
@@ -68,7 +147,7 @@ HUD.prototype = {
     var idx;
     for(idx = 0; idx < Game.players.length; idx++) {
       var model = Game.players[idx];
-      var slot = new PlayerSlot(model);
+      var slot = new PlayerSlot(model, idx);
       var slotEl = slot.build();
 
       this.dom.players.appendChild( slotEl );
@@ -76,6 +155,12 @@ HUD.prototype = {
     }
 
     this.el.appendChild( this.dom.players );
+  },
+  refresh: function() {
+    for(var idx = 0; idx < Game.players.length; idx++) {
+      var slot = this.dom.players[idx];
+      slot.refresh();
+    }
   },
   cleanupInner: function() {
     if(this.dom.players) {
@@ -97,8 +182,9 @@ HUD.prototype = {
   },
 };
 
-PlayerSlot = function( model ) {
+PlayerSlot = function( model, index ) {
   this.model = model;
+  this.index = index;
   this.el = null;
   this.dom = {
     score: null,
@@ -138,8 +224,8 @@ PlayerSlot.prototype = {
     this.el = null;
   },
   render: function() {
-    this.dom.name.innerHTML = "Player";
-    this.dom.score.innerHTML = "Score: 0";
+    this.dom.name.innerHTML = this.model.name || "Player " + (this.index + 1);
+    this.dom.score.innerHTML = this.model.score;
   }
 };
 
