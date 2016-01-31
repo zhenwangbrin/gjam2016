@@ -8,23 +8,8 @@ Game = function() {
   this.firebase = {};
 };
 Game.prototype = {
-  // auth: function() {
-  //   var FireURL = "gjam2016.firebaseio.com/";
-  //   var ref = new Firebase(FireURL);
-  //   ref.authWithCustomToken("3Bdk3eWhR6QLEbVxhPA37rN4FdCMEsdNA9jcgKAr", function(error, authData) {
-  //     if (error) {
-  //       console.log("Authentication Failed!", error);
-  //     } else {
-  //       console.log("Authenticated!");
-  //      }
-  //   });
-  //
-  //   this.firebase = ref;
-  // },
   initialize: function() {
-    // this.auth();
     this.bindFirebase();
-    // this.hud.build();
     this.cloud.setCloudMiddle();
   },
   updateScores: function( newPlayerValues ) {
@@ -71,13 +56,6 @@ Game.prototype = {
   restart: function() {
 
   },
-  setCloudPosition: function( position ) {
-
-  },
-  setCloudMiddle: function() {
-
-  },
-
   setCloudToPlayer: function( playerIndex ) {
     var position = this.map.getPositionForPlayer( playerIndex );
 
@@ -105,10 +83,30 @@ Sequence.prototype = {
     setTimeout( function() {
       this.hideTimeout = null;
       sequence.hidePart();
+      sequence.scramble();
     }, 1000);
   },
   refresh: function( ) {
     this.el.innerHTML = this.pattern.join(" ");
+  },
+  scramble: function() {
+    // Fisher-Yates scramble (http://stackoverflow.com/a/2450976)
+    var currentIndex = this.pattern.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = this.pattern[currentIndex];
+      this.pattern[currentIndex] = this.pattern[randomIndex];
+      this.pattern[randomIndex] = temporaryValue;
+    }
+    this.refresh();
+    return this.pattern;
   },
   hidePart: function() {
     var index = Math.random();
